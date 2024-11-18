@@ -106,36 +106,24 @@ public class PetMenu {
         }
     }
     
-
 private void updateTransactionStatus() {
-    // Get the appointment ID from the user
     int appointmentId = getValidAppointmentId();
 
-    // Retrieve the current status of the appointment
     String currentStatus = getCurrentStatus(appointmentId); 
 
-    // Check if the appointment exists
     if (currentStatus == null) {
         System.out.println("No appointment found with the given ID.");
-        return; // Exit the method if no appointment is found
+        return;
     }
-
-    // Check if the status is already "paid"
     if ("paid".equalsIgnoreCase(currentStatus)) {
         System.out.println("Cannot update transaction status. The status is already 'paid'.");
-        return; // Exit the method if the status is paid
+        return;
     }
-
-    // Get new status from the user
     String newStatus = getValidStringInput("Enter new status (paid/unpaid): ");
-
-    // Validate the new status
     if (!newStatus.equalsIgnoreCase("paid") && !newStatus.equalsIgnoreCase("unpaid")) {
         System.out.println("Invalid status. Please enter 'paid' or 'unpaid'.");
-        return; // Exit if the input is invalid
+        return; 
     }
-
-    // Prepare the SQL update statement
     String sql = "UPDATE tbl_appointments SET l_status = ? WHERE a_id = ?";
     try (Connection conn = dbConfig.connectDB();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -143,7 +131,6 @@ private void updateTransactionStatus() {
         stmt.setInt(2, appointmentId);
         int rowsAffected = stmt.executeUpdate();
         
-        // Check if the update was successful
         if (rowsAffected > 0) {
             System.out.println("Transaction status updated successfully.");
         } else {
@@ -153,8 +140,6 @@ private void updateTransactionStatus() {
         System.out.println("Error updating transaction status: " + e.getMessage());
     }
 }
-
-// Assuming you have this method to get the current status
 private String getCurrentStatus(int appointmentId) {
     String sql = "SELECT l_status FROM tbl_appointments WHERE a_id = ?";
     try (Connection conn = dbConfig.connectDB();
@@ -162,16 +147,15 @@ private String getCurrentStatus(int appointmentId) {
         stmt.setInt(1, appointmentId);
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
-            return rs.getString("l_status"); // Return the current status
+            return rs.getString("l_status"); 
         } else {
-            return null; // No appointment found with the given ID
+            return null; 
         }
     } catch (SQLException e) {
         System.out.println("Error retrieving current status: " + e.getMessage());
-        return null; // Return null on error
+        return null;
     }
 }
-
     private String getValidStringInput(String prompt) {
         while (true) {
             System.out.print(prompt);
