@@ -73,7 +73,7 @@ public class PetMenu {
                     break;
                 case 6:
                     
-                    appointmentManager.viewAppointments();
+                    reportManager.viewAppointmentReport();
                     updateTransactionStatus();
                     break;
                 case 7:
